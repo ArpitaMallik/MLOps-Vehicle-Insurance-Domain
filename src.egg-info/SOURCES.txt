@@ -29,9 +29,9 @@ src/entity/estimator.py
 src/entity/s3_estimator.py
 src/exception/__init__.py
 src/logger/__init__.py
-src/pipline/__init__.py
-src/pipline/prediction_pipeline.py
-src/pipline/training_pipeline.py
+src/pipeline/__init__.py
+src/pipeline/prediction_pipeline.py
+src/pipeline/training_pipeline.py
 src/utils/__init__.py
 src/utils/main_utils.py
 venv/Lib/site-packages/decorator.py
