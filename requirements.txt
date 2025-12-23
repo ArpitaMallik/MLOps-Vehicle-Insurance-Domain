@@ -4,7 +4,6 @@ numpy
 matplotlib
 plotly
 seaborn
-scikit-learn
 pymongo
 from_root
 dill
@@ -18,4 +17,6 @@ python-multipart
 uvicorn
 jinja2
 imblearn
+scikit-learn==1.6.1
+joblib
 -e .

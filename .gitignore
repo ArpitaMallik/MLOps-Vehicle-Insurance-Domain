@@ -2,3 +2,5 @@
 /logs
 /notebook/mongoDB_demo.ipynb
 artifact/
+*.egg-info/
+env/
