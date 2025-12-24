@@ -248,7 +248,7 @@ This design enables:
 
   * Pulls the latest Docker image from ECR
   * Runs the container with required environment variables
-  * Exposes port **5080** via security group rules
+  * Exposes port **5000** via security group rules
 * The EC2 instance also acts as the self-hosted GitHub Actions runner.
 
 Access the application at:
