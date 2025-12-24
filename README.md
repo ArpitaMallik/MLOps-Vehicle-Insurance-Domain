@@ -1,130 +1,144 @@
-# 🚗 Vehicle Insurance Prediction – End-to-End MLOps Project
+# Vehicle Insurance Prediction - An End to End MlOps Project
 
-An end-to-end **production-grade machine learning system** for predicting vehicle insurance outcomes, built with a strong focus on **clean architecture, scalability, CI/CD, and cloud deployment**.
-
-This project goes far beyond training a model in a notebook. It demonstrates how a real-world ML system is **designed, validated, trained, versioned, deployed, and monitored** in a cloud environment.
+An end-to-end machine learning system for vehicle insurance prediction, designed with a modular pipeline architecture and deployed using AWS services. The project covers the full lifecycle of an ML system, including data ingestion, validation, model training, evaluation, versioned storage, automated deployment, and inference serving.
 
 ---
 
-## Problem Overview
+## System Overview
 
-Insurance companies rely on accurate risk prediction to make underwriting decisions.
-This project builds a **vehicle insurance prediction pipeline** that:
+The system implements a reproducible ML workflow starting from raw data stored in MongoDB and ending with a deployed prediction service running on AWS EC2. Each stage of the pipeline is isolated, configurable, and artifact-driven to support maintainability and controlled model updates.
 
-* Ingests raw data from **MongoDB Atlas**
-* Validates and transforms data using a schema-driven approach
-* Trains and evaluates ML models
-* Stores and versions models in **AWS S3**
-* Serves predictions via a **Flask web application**
-* Deploys automatically using **Docker, GitHub Actions, AWS ECR & EC2**
+Core stages:
 
----
-
-## Key Highlights (Why Recruiters Care)
-
-* Modular, production-ready **ML pipeline architecture**
-* Strong separation of concerns (ingestion, validation, transformation, training, evaluation, serving)
-* **Schema-based data validation**
-* Centralized logging & custom exception handling
-* **Model versioning & threshold-based evaluation**
-* Full **CI/CD pipeline** with Docker + GitHub Actions
-* Deployed on **AWS EC2** with containerized inference
-* Supports **on-demand training via API**
-
-This is not a toy project. This is how ML systems are built in the real world.
+* Data ingestion from MongoDB Atlas
+* Schema-based data validation
+* Feature engineering and transformation
+* Model training and evaluation
+* Model registry backed by Amazon S3
+* Prediction service via Flask
+* Automated CI/CD with Docker, GitHub Actions, and AWS
 
 ---
 
-## Project Architecture
+## Project Structure
 
 ```
-src/
+.
+├── src/
+│   ├── components/              # ML pipeline components
+│   │   ├── data_ingestion.py
+│   │   ├── data_validation.py
+│   │   ├── data_transformation.py
+│   │   ├── model_trainer.py
+│   │   ├── model_evaluation.py
+│   │   └── model_pusher.py
+│   │
+│   ├── configuration/           # MongoDB and AWS configuration
+│   ├── aws_storage/             # S3 interaction utilities
+│   ├── pipeline/                # Training and prediction pipelines
+│   ├── entity/                  # Config and artifact definitions
+│   ├── utils/                   # Shared utilities
+│   └── constants/               # Centralized constants
 │
-├── components/        # Core ML pipeline components
-│   ├── data_ingestion.py
-│   ├── data_validation.py
-│   ├── data_transformation.py
-│   ├── model_trainer.py
-│   ├── model_evaluation.py
-│   └── model_pusher.py
-│
-├── entity/            # Configs & artifacts
-├── configuration/    # MongoDB & AWS connections
-├── aws_storage/      # S3 model registry utilities
-├── pipeline/         # Training & prediction pipelines
-├── utils/            # Common utilities
-│
-├── app.py             # Flask app
-├── demo.py            # Pipeline execution
-└── constants/         # Centralized constants
+├── notebook/                    # EDA and MongoDB upload notebooks
+├── static/                      # Static assets
+├── template/                    # HTML templates
+├── app.py                       # Flask application
+├── demo.py                      # Pipeline execution entry point
+├── requirements.txt
+├── setup.py
+├── pyproject.toml
+└── README.md
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## Technology Stack
 
-**Languages & Frameworks**
+* **Language**: Python 3.10
+* **ML**: scikit-learn **3.6.1**, Pandas, NumPy
+* **Backend**: Flask
+* **Database**: MongoDB Atlas
+* **Cloud & DevOps**:
 
-* Python 3.10
-* Flask
-
-**Data & Storage**
-
-* MongoDB Atlas
-* AWS S3 (Model Registry)
-
-**Machine Learning**
-
-* Scikit-learn
-* Pandas, NumPy
-
-**DevOps & MLOps**
-
-* Docker
-* GitHub Actions (CI/CD)
-* AWS EC2
-* AWS ECR
-* IAM
+  * AWS S3 (model registry)
+  * AWS ECR (Docker image registry)
+  * AWS EC2 (deployment & inference)
+  * AWS IAM (access management)
+  * Docker
+  * GitHub Actions (CI/CD)
 
 ---
 
-## Getting Started
+## Environment Setup
 
-### 1️⃣ Project Setup
+This project uses Python’s built-in virtual environment tooling.
+
+### Create Virtual Environment
 
 ```bash
-conda create -n vehicle python=3.10 -y
-conda activate vehicle
+python -m venv venv
+```
+
+### Activate Virtual Environment
+
+**Windows (PowerShell / CMD)**
+
+```bash
+.\venv\Scripts\Activate
+```
+
+**Linux / macOS**
+
+```bash
+source venv/bin/activate
+```
+
+### Install Dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-Local packages are configured via `setup.py` and `pyproject.toml`.
+> **Important**
+> This project is tested with **scikit-learn version 3.6.1**.
+> Using a different version may lead to compatibility issues during training, serialization, or inference.
 
 ---
 
-### 2️⃣ MongoDB Setup
+## MongoDB Configuration
 
-* Create a **MongoDB Atlas** cluster (M0 – Free Tier)
-* Add IP access: `0.0.0.0/0`
-* Create DB user and copy the connection string
-* Set environment variable:
+1. Create a MongoDB Atlas project and M0 cluster.
+2. Add IP access: `0.0.0.0/0`.
+3. Create a database user.
+4. Copy the Python connection string.
+5. Set the environment variable:
+
+**Bash**
 
 ```bash
 export MONGODB_URL="mongodb+srv://<username>:<password>..."
 ```
 
+**PowerShell**
+
+```powershell
+$env:MONGODB_URL="mongodb+srv://<username>:<password>..."
+```
+
 ---
 
-### 3️⃣ Data Ingestion
+## Data Ingestion
 
-* Data is pushed to MongoDB via a notebook
-* The ingestion pipeline:
+* Raw data is uploaded to MongoDB using a Jupyter notebook.
+* The ingestion component:
 
-  * Fetches data from MongoDB
-  * Converts key-value records into DataFrames
-  * Saves artifacts for downstream steps
+  * Connects to MongoDB
+  * Retrieves records in key-value format
+  * Converts them into a Pandas DataFrame
+  * Stores ingestion artifacts for downstream steps
 
-Run:
+Run the pipeline:
 
 ```bash
 python demo.py
@@ -132,23 +146,41 @@ python demo.py
 
 ---
 
-### 4️⃣ Data Validation & Transformation
+## Data Validation
 
-* Schema-driven validation using `config/schema.yaml`
-* Ensures:
+* Dataset schema is defined in `config/schema.yaml`.
+* Validation checks include:
 
-  * Correct column names
+  * Column presence
   * Data types
-  * Missing value checks
-* Feature engineering & preprocessing handled in transformation stage
+  * Missing values
+* Validation artifacts determine whether the pipeline proceeds.
 
 ---
 
-### 5️⃣ Model Training & Evaluation
+## Data Transformation
 
-* Models are trained using transformed datasets
-* Evaluation compares new models against existing ones
-* Promotion happens **only if performance improves beyond a threshold**
+* Feature engineering and preprocessing are handled in the transformation stage.
+* Preprocessing objects and estimators are defined in the `entity` layer.
+* Transformed datasets are stored as versioned artifacts.
+
+---
+
+## Model Training
+
+* Models are trained using transformed data.
+* Training outputs include:
+
+  * Serialized model
+  * Performance metrics
+* Training behavior is fully configuration-driven.
+
+---
+
+## Model Evaluation
+
+* The newly trained model is compared against the currently deployed model pulled from S3.
+* A model is promoted only if the improvement exceeds a defined threshold:
 
 ```python
 MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE = 0.02
@@ -156,65 +188,110 @@ MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE = 0.02
 
 ---
 
-### 6️⃣ Model Registry (AWS S3)
+## AWS Integration and Deployment
 
-* Trained models are stored in S3
-* Versioned model artifacts allow rollback & reproducibility
+### AWS Services Used
 
----
-
-## 🌐 Web Application
-
-* Flask app serves predictions
-* `/predict` – Run inference
-* `/training` – Trigger model training from UI
-* Static & template directories included for UI rendering
+* **IAM** – Secure credential and access management
+* **S3** – Model registry and artifact storage
+* **ECR** – Docker image repository
+* **EC2** – Application hosting and inference runtime
+* **GitHub Actions** – CI/CD orchestration with a self-hosted runner
 
 ---
 
-## 🔁 CI/CD Pipeline
+### Credential Management
 
-Every push triggers:
+AWS credentials are provided via environment variables and are never hard-coded.
 
-1. Build Docker image
-2. Push image to **AWS ECR**
-3. Pull & run container on **AWS EC2**
-4. Application auto-deploys
+* Used by:
 
-**Tools Used**
+  * CI/CD pipeline (GitHub Actions secrets)
+  * EC2 runtime environment
+* Required variables:
 
-* Docker
-* GitHub Actions
-* Self-hosted EC2 runner
-* AWS ECR + EC2
+  * `AWS_ACCESS_KEY_ID`
+  * `AWS_SECRET_ACCESS_KEY`
+  * `AWS_DEFAULT_REGION`
 
 ---
 
-## 📦 Deployment
+### Model Registry (Amazon S3)
 
-* App runs on EC2 (Ubuntu)
-* Dockerized Flask app exposed on port **5000**
+* All trained models are versioned and stored in S3.
+* During evaluation:
+
+  * The current production model is pulled from S3
+  * The new model is compared against it
+* Approved models are pushed back to S3 using a consistent key structure.
+
+This design enables:
+
+* Model reproducibility
+* Controlled promotion
+* Rollback capability
+
+---
+
+### Containerization and Image Management (ECR)
+
+* The application is packaged as a Docker image.
+* CI/CD builds the image and pushes it to Amazon ECR.
+* ECR serves as the source for deployment artifacts.
+
+---
+
+### Deployment on Amazon EC2
+
+* An Ubuntu EC2 instance hosts the application.
+* The instance:
+
+  * Pulls the latest Docker image from ECR
+  * Runs the container with required environment variables
+  * Exposes port **5080** via security group rules
+* The EC2 instance also acts as the self-hosted GitHub Actions runner.
+
+Access the application at:
 
 ```
-http://<EC2_PUBLIC_IP>:5080
+http://44.200.173.215:5000/
 ```
 
 ---
 
-## 🧪 Logging & Error Handling
+### CI/CD Pipeline
 
-* Centralized logging for observability
-* Custom exception handling for debuggability
-* Designed to survive real-world failures (bad data, connection drops, schema mismatches)
+On each push to the repository:
+
+1. GitHub Actions builds the Docker image
+2. The image is pushed to Amazon ECR
+3. The EC2 runner pulls the updated image
+4. The running container is replaced
+
+This provides consistent, repeatable deployments without manual intervention.
 
 ---
 
-## 📌 Final Notes
+## Prediction Service
 
-This project showcases:
+* The Flask application exposes:
 
-* **Software engineering discipline**
-* **Machine learning best practices**
-* **Cloud-native deployment**
-* **Production-ready MLOps thinking**
+  * `/predict` – Run inference
+  * `/training` – Trigger model training
+* Model updates can occur independently of application redeployment.
 
+---
+
+## Logging and Exception Handling
+
+* Centralized logging across pipeline stages
+* Custom exception handling for improved traceability
+* Logs generated for ingestion, validation, training, and deployment steps
+
+---
+
+## Notes
+
+* The `artifact/` directory is excluded from version control.
+* Environment variables are required for MongoDB and AWS access.
+* Model training can be triggered both locally and via the web interface.
