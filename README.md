@@ -57,7 +57,7 @@ Core stages:
 
 * **Language**: Python 3.10
 * **ML**: scikit-learn **3.6.1**, Pandas, NumPy
-* **Backend**: Flask
+* **Backend**: FastAPI
 * **Database**: MongoDB Atlas
 * **Cloud & DevOps**:
 
