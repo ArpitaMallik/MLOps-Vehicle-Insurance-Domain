@@ -1,7 +1,3 @@
-Here’s a **clean, recruiter-friendly README** that tells a strong engineering + MLOps story without drowning the reader in chaos. It *signals seriousness*, *shows system thinking*, and *doesn’t read like class notes*. You can paste this straight into GitHub.
-
----
-
 # 🚗 Vehicle Insurance Prediction – End-to-End MLOps Project
 
 An end-to-end **production-grade machine learning system** for predicting vehicle insurance outcomes, built with a strong focus on **clean architecture, scalability, CI/CD, and cloud deployment**.
